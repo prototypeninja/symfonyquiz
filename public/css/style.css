@@ -1,0 +1,63 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  color: white;
+}
+
+.bg1 {
+  background-image: url("../images/b2.jpeg");
+  height: 100%; 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.navbar-brand{
+	font-family: 'Parisienne', cursive;
+	font-weight: bold;
+	font-size: 180%;
+}
+.card-img-top{
+	width: 100%;
+
+}
+
+.container, .row.justify-content-center.align-items-center {
+  height: 90%;
+}
+form{
+    width: 90%;
+}
+h3{
+	text-align: justify;
+}
+body a:hover{
+    text-decoration: none;
+
+}
+
+.scale-div {
+    cursor: default;
+    text-shadow: 0 3px 2px rgba(0,0,0,0.4);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    -webkit-transition-duration: .3s;
+    -moz-transition-duration: .3s;
+    -o-transition-duration: .3s
+}
+.hide{
+    display: none;
+}
+.save-div{
+    width: 60%;
+}
+.score-div{
+    padding: 3%;
+    width: 60%;
+    color: cadetblue;
+    border-radius: 10px;
+    background-color: white;
+}
+
+
+

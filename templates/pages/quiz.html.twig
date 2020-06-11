@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+{% block title 'Home'%}
+{% block body %}
+    <div class="container">
+        <div class="row  justify-content-center align-items-center">
+            <form method="POST" action="{{ path ('result') }}">
+
+
+                {% for question in questions %}
+                <div class="questions  m-4 animate__animated hide">
+
+                       <h3 class="question">{{ question.questions }}</h3>
+
+
+                    <div class="chiz">
+                        {% for reponse in question.reponsetabs %}
+                            <div class="input-group m-2 input-group-lg reponse-input">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <input class="reponse" type="radio" name="{{ question.id }}" value="{{ reponse.id }}" aria-label="Radio button for following text input">
+
+                                    </div>
+                                </div>
+                                <span class="form-control bg-primary text-white">{{ reponse.reponses }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="next btn btn-primary float-right" disabled >Suivant</button>
+
+                </div>
+                {% endfor %}
+                <div class="row justify-content-center align-items-center sendreponse">
+                    <div class="form-group save-div hide">
+                        <h3>Enregistrer</h3>
+                        <label for="pseudolabel">Entrer votre pseudo pour enregistrer vos reponses</label>
+                        <input type="text" class="form-control mb-3"  placeholder="Entrer votre pseudo" name="pseudo">
+                        <input type="submit" class="send btn btn-primary" value="Terminé">
+                    </div>
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+    </div>
+
+    <script>
+        $( document ).ready(function() {
+    var checkquiz=0;
+            $(".reponse-input").hover(
+                function () {
+
+                    $(this).addClass('scale-div');
+                },
+                function () {
+                    $(this).removeClass("scale-div");
+                }
+
+            );
+
+            $(".reponse-input").click(function () {
+                this.children[0].children[0].children[0].checked="true";
+                var elem=this.children[0].children[0].children[0]
+                if ( elem.checked ){
+                    this.children[0].parentElement.parentElement.parentNode.lastChild.previousSibling.removeAttribute("disabled")
+                    console.log(this.children[0].parentElement.parentElement.parentNode.lastChild.previousSibling);
+                }
+            })
+
+            var questions = $(".questions");
+            var i=questions.length;
+            var l=0;
+            questions[0].className="questions m-4 animate__animated animate__backInRight";
+            $(".next").click(function () {
+
+                if (l==i-1){
+                $(".save-div").removeClass("hide");
+                }
+                l++;
+                this.parentElement.classList.add(["hide"]);
+
+                if (l!=i){
+                    questions[l].className="questions m-4 animate__animated animate__backInRight";
+                }
+            });
+
+        });
+    </script>
+
+{% endblock %}

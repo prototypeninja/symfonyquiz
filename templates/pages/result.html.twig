@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+{% block title 'Home'%}
+{% block body %}
+    <div class="container">
+        <div class="row  justify-content-center align-items-center">
+            <div class=" row score-div text-center">
+                <div class="col-md-12">
+                    <h1>Vous avez pu repondre a</h1>
+                </div>
+                <div class="col-md-12">
+                    <h1>{{ score }}</h1>
+                </div>
+
+                <div class="stater col-md-6">
+                    <a href="{{path ('score') }}"><button type="button" class="btn btn-outline-primary mb-3  btn-block">Voir les scores</button></a>
+                </div>
+
+                <div class="stater col-md-6 ">
+                    <a href="{{path ('quiz') }}"><button type="button" class="btn btn-outline-success  btn-block">Recommencer</button></a>
+
+                </div>
+            </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
