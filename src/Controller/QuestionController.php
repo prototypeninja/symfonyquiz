@@ -4,13 +4,17 @@ namespace App\Controller;
 
 use App\Entity\Questiontab;
 use App\Entity\Reponsetab;
+use App\Entity\Score;
 use App\Repository\QuestiontabRepository;
 use App\Repository\ReponsetabRepository;
+use App\Repository\ScoreRepository;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
 class QuestionController extends Controller
 {
+
     public function findScore($post){
         if (isset($post)){
             $i = 0;
@@ -44,15 +48,19 @@ class QuestionController extends Controller
     }
 
     /**
+     * @var $repScore;
      * @var QuestionsRepository;
      * @var ReponsesRepository;
+
      */
     private $repQuestion;
     private $repReponse;
-    public function __construct(QuestiontabRepository $repQuestion, ReponsetabRepository $repReponse )
+    private $repScore;
+    public function __construct(QuestiontabRepository $repQuestion, ReponsetabRepository $repReponse, ScoreRepository $repScore )
     {
         $this->repQuestion=$repQuestion;
         $this->repReponse=$repReponse;
+        $this->repScore=$repScore;
     }
 
     /**
@@ -76,18 +84,38 @@ class QuestionController extends Controller
      */
     public function score()
     {
-        return $this->render('pages/score.html.twig');
+        $scoresUser=$this->repScore->findAll();
+
+        return $this->render('pages/score.html.twig',['scores'=>$scoresUser]);
     }
     /**
      * @Route("/result", name="result")
      */
     public function result()
     {
+        if (!isset($_POST['pseudo'])){
+            return $this->redirectToRoute('home');
+        }
+        $score=$this->findScore($_POST);
+        $em=$this->getDoctrine()->getManager();
+        $pseudo=$this->repScore->findOneBy(array('pseudo'=>$_POST['pseudo']));
 
-    $score=$this->findScore($_POST);
+        if (!$pseudo){
+            $repScore=new Score();
+            $repScore->setPseudo($_POST['pseudo'])
+                ->setScore($score);
+            $em=$this->getDoctrine()->getManager();
+            $em->persist($repScore);
+            $em->flush();
+        }else{
+            $pseudo->setScore($score);
+            $em->flush();
+        }
 
 
         return $this->render('pages/result.html.twig',['score'=>$score]);
     }
+
+
 
 }
