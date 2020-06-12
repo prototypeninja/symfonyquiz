@@ -15,6 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class QuestionController extends Controller
 {
 
+  //cette fonction permet de calculer le score et de retourne le score
+
+
     public function findScore($post){
         if (isset($post)){
             $i = 0;
@@ -34,8 +37,6 @@ class QuestionController extends Controller
                     break;
 
                 }
-
-
 
                 //echo intval(substr($key,-1));
 
@@ -75,7 +76,7 @@ class QuestionController extends Controller
      */
     public function question()
     {
-        $questions=$this->repQuestion->findAll();
+        $questions=$this->repQuestion->findAll();//recuperation des questions
 
         return $this->render('pages/quiz.html.twig',['questions'=>$questions]);
     }
@@ -84,7 +85,7 @@ class QuestionController extends Controller
      */
     public function score()
     {
-        $scoresUser=$this->repScore->findAll();
+        $scoresUser=$this->repScore->findAll();//recuperation des scores
 
         return $this->render('pages/score.html.twig',['scores'=>$scoresUser]);
     }
@@ -93,26 +94,33 @@ class QuestionController extends Controller
      */
     public function result()
     {
+        /*
+         si le formulaire n'est pas soumit ou si on accès d'accedé a la vue result
+        par url, une redirection est encrenché vers la page d'acceuile.
+
+         */
         if (!isset($_POST['pseudo'])){
             return $this->redirectToRoute('home');
-        }
-        $score=$this->findScore($_POST);
-        $em=$this->getDoctrine()->getManager();
-        $pseudo=$this->repScore->findOneBy(array('pseudo'=>$_POST['pseudo']));
-
-        if (!$pseudo){
-            $repScore=new Score();
-            $repScore->setPseudo($_POST['pseudo'])
-                ->setScore($score);
-            $em=$this->getDoctrine()->getManager();
-            $em->persist($repScore);
-            $em->flush();
         }else{
-            $pseudo->setScore($score);
-            $em->flush();
+            $score=$this->findScore($_POST);// on appelle fontions  traitement post =>score
+            $em=$this->getDoctrine()->getManager();//initialisation atity manager de doctrine
+            $pseudo=$this->repScore->findOneBy(array('pseudo'=>$_POST['pseudo']));//essai recupération pseudo de l'entité score = post['pseudo']
+            if (!$pseudo){ //false! enregistrer le  pseudo et le score dans la base
+                $repScore=new Score();
+                $repScore->setPseudo($_POST['pseudo'])
+                    ->setScore($score);
+                $em=$this->getDoctrine()->getManager();
+                $em->persist($repScore);
+                $em->flush();
+            }else{
+                //true! mettre a jour le score du pseudo
+                $pseudo->setScore($score);
+                $em->flush();
+            }
+            //envoie du score a la vue
+            return $this->render('pages/result.html.twig',['score'=>$score]);
         }
 
-        return $this->render('pages/result.html.twig',['score'=>$score]);
     }
 
 

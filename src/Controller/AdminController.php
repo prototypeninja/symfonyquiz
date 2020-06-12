@@ -20,7 +20,6 @@ class AdminController extends Controller
      * @var $repScore;
      * @var QuestionsRepository;
      * @var ReponsesRepository;
-
      */
     private $repQuestion;
     private $repReponse;
@@ -45,10 +44,16 @@ class AdminController extends Controller
     /**
      * @Route("/admin/edit{id}", name="edit")
      */
-    public function edit()
+    public function edit(Questiontab $questions, Request $request,$id)
     {
-        $questions=$this->repQuestion->findAll();
-        return $this->render('admin/edit.html.twig',['questions'=>$questions]);
+        $form=$this->createForm(AddQuestionFormType::class,$questions);
+
+        return $this->render('admin/edit.html.twig',[
+            '$questions'=>$questions,
+            'form'=>$form->createView()]);
+
+
+
     }
     /**
      * @Route("/admin/delete{id}", name="delete")
