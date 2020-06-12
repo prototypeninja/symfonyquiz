@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin-Add{% endblock %}
+
+{% block body %}
+<div class="container">
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-success">Enregistrer</button>
+    <a href="{{path ('admin')}}" class="btn btn-primary mb-3 float-right">Retour</a>
+    {{ form_end(form) }}
+</div>
+
+{% endblock %}
