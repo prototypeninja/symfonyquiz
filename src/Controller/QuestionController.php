@@ -112,7 +112,6 @@ class QuestionController extends Controller
             $em->flush();
         }
 
-
         return $this->render('pages/result.html.twig',['score'=>$score]);
     }
 
