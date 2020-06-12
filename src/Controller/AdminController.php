@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Questiontab;
+use App\Entity\Reponsetab;
 use App\Form\AddQuestionFormType;
+use App\Form\ReponseFormType;
 use App\Repository\QuestiontabRepository;
 use App\Repository\ReponsetabRepository;
 use App\Repository\ScoreRepository;
@@ -60,7 +62,7 @@ class AdminController extends Controller
         return $this->redirectToRoute('admin',['questions'=>$questions]);
     }
     /**
-     * @Route("/admin/add", name="add")
+     * @Route("/admin/addQuestion", name="addQuestion")
      */
     public function add(Request $request)
     {
@@ -79,13 +81,23 @@ class AdminController extends Controller
 
 
     }
+
     /**
      * @Route("/admin/addReponse{id}", name="addReponse")
      */
-    public function addreponse()
+    public function addreponse(Questiontab $question ,Request $request, $id)
     {
+        $reponsetab=new Reponsetab();
+        $form=$this->createForm(ReponseFormType::class, $reponsetab);
+        $form->handleRequest($request);
+        if ($form-> isSubmitted()){
+            $intId=intval($id);
+            $reponsetab->setQuestion($question);
+            $this->em->persist($reponsetab);
+            $this->em->flush();
+        }
 
-        return $this->render('admin/addReponse.html.twig');
+        return $this->render('admin/addReponse.html.twig',['form'=>$form->createView()]);
     }
 
 }
